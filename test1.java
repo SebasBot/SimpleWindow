@@ -1,146 +1,147 @@
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
-import java.awt.*;
 
-
-class accion{
-    //OBJETO Principal
-JFrame Ventana = new JFrame("Nueva Ventana");
-
-//parte superior: Menu
-JMenuBar Menu = new JMenuBar();
-
-//Opcion Main First
-JMenu M1 = new JMenu("Color");
-JMenuItem M11 = new JMenuItem("Amarillo");
-JMenuItem M12 = new JMenuItem("Rojo");
-JMenuItem M13 = new JMenuItem("Azul");
-JMenuItem M14 = new JMenuItem("Negro");
-
-//Opcion Main Second 
-JMenu M2 = new JMenu("Imagen");
-JMenuItem M22 = new JMenuItem("Abrir");
-JMenuItem M23 = new JMenuItem("Ejemplo");
-
-//Parte Central 
-JLabel Contenido = new JLabel();
-JPanel panel = new JPanel();
-JFileChooser dialog = new JFileChooser();
-
-//parte inferior
-JPanel Panel = new JPanel();
-JLabel Etiqueta = new JLabel("¿Que deseas hacer?");
-JButton exit = new JButton("Salir");
-JButton reset = new JButton("Reiniciar");
-
+class Accion{
+//main Frame
+    JFrame VENTANA = new JFrame("Nueva ventana");
+    //Layout Superior
+    JMenuBar MENU= new JMenuBar();
     
+    //Opcion Main First 
+    JMenu M1 = new JMenu("Imagen");
+    JMenuItem M11 = new JMenuItem("Abrir");
+    JMenuItem M12 = new JMenuItem("Ejemplo");
+
+    //Opcion Main Second
+    JMenu M2 = new JMenu("Color");
+    JMenuItem M21 = new JMenuItem("Amarillo");
+    JMenuItem M22 = new JMenuItem("Rojo");
+    JMenuItem M23 = new JMenuItem("Azul");
+    JMenuItem M24 = new JMenuItem("Negro");
+    
+    //Mid
+    JLabel CONTENIDO = new JLabel();
+    JFileChooser DIALOGO = new JFileChooser();
+    
+    //Bottom
+    JPanel PANEL = new JPanel();        
+    JLabel BOTTOMTAG = new JLabel("¿Algo Mas?");
+    JButton RESET = new JButton("Reiniciar");
+    JButton EXIT = new JButton("Salir");
+    
+    
+    public void baseView(){
+    VENTANA.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    VENTANA.setUndecorated(true);
+    VENTANA.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-    public void GUI(){
-        Ventana.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        Ventana.setUndecorated(true);
-        Ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Ventana.getContentPane().add(BorderLayout.NORTH, Menu);
-        Ventana.getContentPane().add(BorderLayout.SOUTH, panel);
-        Ventana.setVisible(true);
+    VENTANA.setVisible(true);
+    
     }
-
-    public void PanelSuperior(){
-        Menu.add(M1);
+    
+    public void northLayout(){
+        MENU.add(M1);
         M1.add(M11);
         M1.add(M12);
-        M1.add(M13);
-        M1.add(M14);
         
-    
-        Menu.add(M2);
+        MENU.add(M2);
+        M2.add(M21);
         M2.add(M22);
         M2.add(M23);
-            
-        Ventana.getContentPane().add(BorderLayout.NORTH, Menu);
-            
+        M2.add(M24);
+           
+        VENTANA.add(BorderLayout.NORTH, MENU); 
+
+    }
+    
+    public void centerLayout(){
+        VENTANA.add(BorderLayout.CENTER, CONTENIDO);
         
     }
-
-
-    public void EventosM1(){
-        M11.addActionListener(e->{  
-              Ventana.getContentPane().setBackground(Color.yellow);
-            });
-            
-        M12.addActionListener(e->{  
-              Ventana.getContentPane().setBackground(Color.red);
-            });
-        M13.addActionListener(e->{  
-              Ventana.getContentPane().setBackground(Color.blue);
-            });
-        M14.addActionListener(e->{  
-              Ventana.getContentPane().setBackground(Color.black);
-            });
-
+    
+    public void southLayout(){
+        PANEL.add(BOTTOMTAG);
+        PANEL.add(RESET);
+        PANEL.add(EXIT);
+                    VENTANA.add(BorderLayout.SOUTH, PANEL);
     }
-
-    public void EventosM2(){
-        M22.addActionListener(e->{
-            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpeg", "jpg", "gif", "png");
-            dialog.setFileFilter(filtro);
-            int returnVal = dialog.showOpenDialog(null);
-
-            if(returnVal == JFileChooser.APPROVE_OPTION){
-                System.out.println("Has escogido: "+dialog.getSelectedFile().getAbsolutePath());
-                Contenido.setIcon(new ImageIcon(dialog.getSelectedFile().getAbsolutePath()));
-            }
-
+    
+    public void evento1(){
+        M11.addActionListener(e->{
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpeg", "png", "jpg", "gif");
+            DIALOGO.setFileFilter(filtro);
+            int returnVal = DIALOGO.showOpenDialog(null);
             
-        });
-
-        M23.addActionListener(e->{
+            switch (returnVal){
+                case JFileChooser.APPROVE_OPTION: 
+                    System.out.println("Has escogido: "+DIALOGO.getSelectedFile().getAbsolutePath());
+                    CONTENIDO.setIcon(new ImageIcon(DIALOGO.getSelectedFile().getAbsolutePath()));
+                    break;
+                case JFileChooser.CANCEL_OPTION:
+                    JOptionPane.showMessageDialog(VENTANA, "Has cancelado la eleccion de imagen", "Atencion", JOptionPane.ERROR_MESSAGE);
+                    break;
+                case JFileChooser.ERROR_OPTION:
+                    JOptionPane.showMessageDialog(VENTANA, "Ha ocurrido un error", "Atencion", JOptionPane.ERROR_MESSAGE);
+                    break;}
+          });
+        M12.addActionListener(e->{
             JOptionPane.showMessageDialog(null, "Vaya...");
         });
-    }
-
-
-
-    public void Eventos(){
-        EventosM1();
-        EventosM2();
-    }
-    
-    public void Contenido(){
-        Ventana.add(BorderLayout.CENTER, Contenido);
-
-    }
-
-    public void LayoutInferior(){
-        JLabel Etiqueta = new JLabel("¿Que deseas hacer?");
-        JButton exit = new JButton("Cerrar App");       
-        JButton reset = new JButton("Reiniciar Panel"); 
         
-        panel.add(Etiqueta);
-        panel.add(exit);
-        panel.add(reset);
-
-        reset.addActionListener(e ->{
-            Ventana.getContentPane().setBackground(null);
-            Contenido.setIcon(null);
-        });
-
-        exit.addActionListener(e ->{
-            Ventana.dispose();
-            System.exit(0);
-        });
     }
     
-
-    accion(){
-        GUI();
-        PanelSuperior();
-        Eventos();
-        Contenido();
-        LayoutInferior();
+    public void evento2(){
+        M21.addActionListener(e->{  
+              VENTANA.getContentPane().setBackground(Color.yellow);
+            });
+            
+        M22.addActionListener(e->{  
+              VENTANA.getContentPane().setBackground(Color.red);
+            });
+        M23.addActionListener(e->{  
+              VENTANA.getContentPane().setBackground(Color.blue);
+            });
+        M24.addActionListener(e->{  
+              VENTANA.getContentPane().setBackground(Color.black);
+            });
+        
     }
-
+    
+    public void evento3(){
+        RESET.addActionListener(e->{
+            VENTANA.setBackground(null);
+            CONTENIDO.setIcon(null);
+        });
+        
+        
+        EXIT.addActionListener(e->{
+            VENTANA.dispose();
+            System.exit(0);
+            
+        });
+        
+    }
+    
+    public void eventos(){
+        evento1();
+        evento2();
+        evento3();
+    }
+    
+    public void iniciarGUI(){
+        System.out.println("GUI iniciado...");
+        baseView();
+        northLayout();
+        centerLayout();
+        southLayout();
+        eventos();
+        
+        
+    }
+}
     public static void main(String[] args) {
-        new accion();
+        new iniciarGUI();
     } 
 }
